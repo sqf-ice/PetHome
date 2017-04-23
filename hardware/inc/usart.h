@@ -17,14 +17,14 @@ typedef struct
 
 extern ALTER_INFO alterInfo;
 
-
 #define USART_DEBUG		USART1		//调试打印所使用的串口组
-
 
 
 void Usart1_Init(unsigned int baud);
 
 void Usart2_Init(unsigned int baud);
+
+void Uart5_Init(unsigned int baud);
 
 void Usart_SendString(USART_TypeDef *USARTx, unsigned char *str, unsigned short len);
 
