@@ -30,6 +30,9 @@
 //C库
 #include <string.h>
 
+//全局变量
+unsigned char uart5Len = 0;	//usart3接收的数据长度
+char uart5Buf[64];	//usart3接收缓存
 
 //数据流
 DATA_STREAM dataStream[] = {
@@ -86,6 +89,8 @@ void Hardware_Init(void)
 	Lcd1602_Init();																//LCD1602初始化
 	
 	Usart1_Init(115200); 														//初始化串口   115200bps
+	
+	Uart5_Init(9600);															//初始化蓝牙串口  9600bps
 	
 	Lcd1602_DisString(0x80, "Check Power On");									//提示进行开机检测
 	Check_PowerOn(); 															//上电自检
@@ -227,6 +232,7 @@ int main(void)
 				Led5_Set(LED_ON);
 			}
 			
+
 /******************************************************************************
 			错误处理
 ******************************************************************************/
@@ -293,6 +299,26 @@ int main(void)
 					UsartPrintf(USART_DEBUG, "NET Device :Error\r\n");
 			}
 		}
+/******************************************************************************
+			蓝牙控制
+******************************************************************************/			
+		if(uart5Len > 0)
+		{
+			 
+			if(strcmp(uart5Buf, "666") == 0){
+				UsartPrintf(UART5, "输入的命令是：\r\n%s\r\n", uart5Buf);
+				Led6_Set(LED_ON);
+				
+			}
+			else if(strcmp(uart5Buf, "233") == 0){
+				UsartPrintf(UART5, "输入的命令是：\r\n%s\r\n", uart5Buf);
+				Led6_Set(LED_OFF);
+			}
+			
+			
+			memset(uart5Buf, 0, sizeof(uart5Buf));
+			uart5Len = 0;
+		}		
 	}
 
 }
