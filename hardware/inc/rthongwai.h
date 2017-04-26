@@ -5,9 +5,9 @@
 #include "led.h"
 
 extern volatile unsigned char  body_value;
-#define Body_GPIO_PORT GPIOA
-#define Body_GPIO_PIN GPIO_Pin_15
-#define Body_GPIO_CLK RCC_APB2Periph_GPIOA
+#define Body_GPIO_PORT GPIOB
+#define Body_GPIO_PIN GPIO_Pin_3
+#define Body_GPIO_CLK RCC_APB2Periph_GPIOB
 
 void Body_Init(void);
 void Get_Bodystatus(void);
