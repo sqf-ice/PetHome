@@ -52,7 +52,7 @@ void Led_Init(void)
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOC, ENABLE);
 	
 	gpioInitStrcut.GPIO_Mode = GPIO_Mode_Out_PP;
-	gpioInitStrcut.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 |GPIO_Pin_10;
+	gpioInitStrcut.GPIO_Pin =  GPIO_Pin_7|GPIO_Pin_8 |GPIO_Pin_10;
 	gpioInitStrcut.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOC, &gpioInitStrcut);
 	
