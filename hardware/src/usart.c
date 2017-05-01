@@ -4,9 +4,9 @@
 	************************************************************
 	*	文件名： 	usart.c
 	*
-	*	作者： 		张继瑞
+	*	作者： 		任
 	*
-	*	日期： 		2016-11-23
+	*	日期： 		2017-3-29
 	*
 	*	版本： 		V1.0
 	*
@@ -29,8 +29,8 @@
 
 
 
-ALTER_INFO alterInfo;
-ALTER_INFO alterInfo5;
+//ALTER_INFO alterInfo;
+
 
 
 
@@ -259,7 +259,8 @@ void UsartPrintf(USART_TypeDef *USARTx, char *fmt,...)
 
 }
 
-
+extern unsigned char usart1Buf[64];
+extern unsigned char usart1Len;
 /*
 ************************************************************
 *	函数名称：	USART1_IRQHandler
@@ -275,17 +276,17 @@ void UsartPrintf(USART_TypeDef *USARTx, char *fmt,...)
 */
 void USART1_IRQHandler(void)
 {
-
-	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) //接收中断
+	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)	//接收中断
 	{
-        if(alterInfo.alterCount > strlen(alterInfo.alterBuf))
-            alterInfo.alterCount = 0;
-        alterInfo.alterBuf[alterInfo.alterCount++] = USART1->DR;
+		if(usart1Len >= 64)									//防止数据过多，导致内存溢出
+			usart1Len = 0;
+		usart1Buf[usart1Len++] = USART1->DR;
+		
 		USART_ClearFlag(USART1, USART_FLAG_RXNE);
 	}
-
 }
 
+ 
 
 extern unsigned char uart5Buf[64];
 extern unsigned char uart5Len;
