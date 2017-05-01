@@ -1,5 +1,4 @@
 #include "rthongwai.h"
-#include "tcrt5000.h"
 volatile unsigned char  body_value=0;
 
 void Body_Init(void){
@@ -13,14 +12,3 @@ void Body_Init(void){
 	GPIO_Init(Body_GPIO_PORT,&GPIO_InitStructure);
 }
 
-
-
-//void Get_Bodystatus(void){
-//	if(GPIO_ReadInputDataBit(Body_GPIO_PORT,Body_GPIO_PIN)){
-//		TIM3->CCR1= 300;
-//		Led5_Set(LED_ON);
-//	}else{
-//		Led5_Set(LED_OFF);
-//		TIM3->CCR1= 735;
-//	}
-//}
