@@ -29,14 +29,17 @@
 #include "fengshan.h"
  
 
-  
+
 //C库
 #include <string.h>
 
 
 //全局变量
-unsigned char uart5Len = 0;	//usart3接收的数据长度
-char uart5Buf[64];	//usart3接收缓存
+unsigned char uart5Len = 0;	//uart5接收的数据长度
+char uart5Buf[64];	//uart5接收缓存
+unsigned char usart1Len = 0;//usart1接收的数据长度
+char usart1Buf[64];//usart1接收缓存
+ 
 
 //数据流
 DATA_STREAM dataStream[] = {
@@ -205,7 +208,7 @@ Lcd1602_DisString(0x80, "PetHouse ENV");
 				dataPtr = NET_DEVICE_GetIPD(0);										//不等待，获取平台下发的数据
 				if(dataPtr != NULL)													//如果数据指针不为空，则代表收到了数据
 				{
-					OneNet_Event(dataPtr);											//集中处理
+					Net_Event(dataPtr);											//集中处理
 				}
 			}
 			
@@ -215,13 +218,13 @@ Lcd1602_DisString(0x80, "PetHouse ENV");
 			if(checkInfo.ADXL345_OK == DEV_OK) 										//只有设备存在时，才会读取值和显示
 			{
 				ADXL345_GetValue();													//采集传感器数据
-//        Lcd1602_DisString(0x80, "PetHouse ENV");
+        //Lcd1602_DisString(0x80, "PetHouse ENV");
 			}
 			if(checkInfo.SHT20_OK == DEV_OK) 										//只有设备存在时，才会读取值和显示
 			{
 				SHT20_GetValue();													//采集传感器数据
 				Lcd1602_DisString(0xC0, "%0.1fC,%0.1f%%", sht20Info.tempreture, sht20Info.humidity);
-				if(sht20Info.tempreture>25||sht20Info.humidity>60){
+				if(sht20Info.tempreture>40||sht20Info.humidity>60){
 					JDQ_Switch(J_ON,JDQ_1);	
 				}
 				else if(sht20Info.tempreture<20&&sht20Info.humidity<55){
@@ -232,12 +235,12 @@ Lcd1602_DisString(0x80, "PetHouse ENV");
 			if(t5000Info.status == TCRT5000_ON)
 			{
 				TCRT5000_GetValue(5);
-				if(t5000Info.voltag < 3500){
+				if(t5000Info.voltag < 3500)
+					//Beep_Set(BEEP_ON);
 					Led6_Set(LED_ON);
-				}
-				else{
+				else
+					//Beep_Set(BEEP_OFF);
 					Led6_Set(LED_OFF);
-				}
 			}
 			
 //			Get_Bodystatus();//人体红外判断开门
@@ -316,6 +319,24 @@ Lcd1602_DisString(0x80, "PetHouse ENV");
 					UsartPrintf(USART_DEBUG, "NET Device :Error\r\n");
 			}
 		}
+
+/******************************************************************************
+	    小娜控制
+******************************************************************************/					
+		if(usart1Len>0){
+			if(strcmp(usart1Buf,"open") == 0){
+				UsartPrintf(USART1,"输入的命令是：\r\n%s\r\n",usart1Buf);
+				JDQ_Switch(J_ON,JDQ_1);
+			}
+			else if(strcmp(usart1Buf,"close") == 0){
+				UsartPrintf(USART1,"输入的命令是：\r\n%s\r\n",usart1Buf);
+				JDQ_Switch(J_OFF,JDQ_1);
+			} 
+			
+			memset(usart1Buf, 0, sizeof(usart1Buf));
+			usart1Len = 0;
+		}
+ 
 /******************************************************************************
 			蓝牙控制
 ******************************************************************************/			
