@@ -51,8 +51,8 @@
 
 
 
-
-ONETNET_INFO oneNetInfo = {"119.29.201.31", "4001", 0, 0, 0, 0};
+//119.29.201.31
+ONETNET_INFO oneNetInfo = {"192.168.137.1", "4001", 0, 0, 0, 0};
 extern DATA_STREAM dataStream[];
 
 
@@ -357,9 +357,9 @@ void OneNet_Status(void)
 
 /*
 ************************************************************
-*	函数名称：	OneNet_Event
+*	函数名称：	Net_Event
 *
-*	函数功能：	平台返回数据检测
+*	函数功能：	网络控制函数
 *
 *	入口参数：	dataPtr：平台返回的数据
 *
@@ -368,32 +368,40 @@ void OneNet_Status(void)
 *	说明：		
 ************************************************************
 */
-void OneNet_Event(unsigned char *dataPtr)
+void Net_Event(unsigned char *dataPtr)
 {
-
-	if(strstr((char *)dataPtr, "CLOSED"))
-	{
-		UsartPrintf(USART_DEBUG, "TCP CLOSED1\r\n");
-		
-		faultTypeReport = faultType = FAULT_EDP;						//标记为协议错误
-		
-		oneNetInfo.errCount++;
-	}
-	else
-	{
-		//这里用来检测是否发送成功
-		if(strstr((char *)dataPtr, "succ"))
+		if(strstr((char *)dataPtr, "1"))
 		{
-			UsartPrintf(USART_DEBUG, "Tips:		Send OK\r\n");
-			oneNetInfo.errCount = 0;
+			UsartPrintf(USART_DEBUG, "开\r\n");
+			Led4_Set(LED_ON);
 		}
-		else
-		{
-			UsartPrintf(USART_DEBUG, "Tips:		Send Err\r\n");
-			oneNetInfo.errCount++;
+		else if(strstr((char *)dataPtr,"0")){
+			UsartPrintf(USART_DEBUG,"关\r\n");
+			Led4_Set(LED_OFF);
 		}
-	}
-	
+//	if(strstr((char *)dataPtr, "CLOSED"))
+//	{
+//		UsartPrintf(USART_DEBUG, "TCP CLOSED1\r\n");
+//		
+//		faultTypeReport = faultType = FAULT_EDP;						//标记为协议错误
+//		
+//		oneNetInfo.errCount++;
+//	}
+//	else
+//	{
+//		//这里用来检测是否发送成功
+//		if(strstr((char *)dataPtr, "succ"))
+//		{
+//			UsartPrintf(USART_DEBUG, "Tips:		Send OK\r\n");
+//			oneNetInfo.errCount = 0;
+//		}
+//		else
+//		{
+//			UsartPrintf(USART_DEBUG, "Tips:		Send Err\r\n");
+//			oneNetInfo.errCount++;
+//		}
+//	}
+//	
 	NET_DEVICE_ClrData();
 
 }

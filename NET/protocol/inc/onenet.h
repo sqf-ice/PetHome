@@ -94,7 +94,7 @@ _Bool OneNet_SendData(HTTP_TYPE  type, unsigned char len);
 
 void OneNet_Status(void);
 
-void OneNet_Event(unsigned char *dataPtr);
+void Net_Event(unsigned char *dataPtr);
 
 
 #endif
