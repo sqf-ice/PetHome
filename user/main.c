@@ -27,8 +27,8 @@
 #include "rthongwai.h"
 #include "duoji.h"
 #include "fengshan.h"
- 
-
+#include "light.h"
+#include "jiaredian.h"
 
 //C库
 #include <string.h>
@@ -101,7 +101,11 @@ void Hardware_Init(void)
 	
 	Uart5_Init(9600);															//初始化蓝牙串口  9600bps
 	
-	JDQ_Init();
+	JDQ_Init();                                //初始化风扇
+	
+	LIGHT_Init();                               //初始化紫外线灯
+	
+	HOT_Init();																	//初始化加热垫
 	
 	Lcd1602_DisString(0x80, "Check Power On");									//提示进行开机检测
 	Check_PowerOn(); 															//上电自检
@@ -180,7 +184,7 @@ Lcd1602_DisString(0x80, "PetHouse ENV");
 /******************************************************************************
 			数据与心跳
 ******************************************************************************/
-			if(timInfo.timer6Out - runTime >= 10)									//25s一次(25ms中断)
+			if(timInfo.timer6Out - runTime >= 60)									//25s一次(25ms中断)
 			{
 				runTime = timInfo.timer6Out;
 				
@@ -224,19 +228,25 @@ Lcd1602_DisString(0x80, "PetHouse ENV");
 			{
 				SHT20_GetValue();													//采集传感器数据
 				Lcd1602_DisString(0xC0, "%0.1fC,%0.1f%%", sht20Info.tempreture, sht20Info.humidity);
-				if(sht20Info.tempreture>40||sht20Info.humidity>60){
+				if(sht20Info.tempreture>=30){
 					JDQ_Switch(J_ON,JDQ_1);	
+//					HOT_Switch(H_ON,HOT_1);
+					LIGHT_Switch(L_ON,LIGHT_1);
+
 				}
-				else if(sht20Info.tempreture<20&&sht20Info.humidity<55){
-					JDQ_Switch(J_OFF,JDQ_1);	
+				else if(sht20Info.tempreture<=29){
+					JDQ_Switch(J_OFF,JDQ_1);
+//					HOT_Switch(H_OFF,HOT_1);
+					LIGHT_Switch(L_OFF,LIGHT_1);
 				}
 			}
 			//红外
-			if(t5000Info.status == TCRT5000_ON)
+			if(t5000Info.status == TCRT5000_ON||GPIO_ReadInputDataBit(Body_GPIO_PORT,Body_GPIO_PIN))
 			{
 				TCRT5000_GetValue(5);
 				if(t5000Info.voltag < 3500)
 					//Beep_Set(BEEP_ON);
+					
 					Led6_Set(LED_ON);
 				else
 					//Beep_Set(BEEP_OFF);
@@ -244,13 +254,13 @@ Lcd1602_DisString(0x80, "PetHouse ENV");
 			}
 			
 //			Get_Bodystatus();//人体红外判断开门
-			if(GPIO_ReadInputDataBit(Body_GPIO_PORT,Body_GPIO_PIN)){
-				TIM3->CCR1= 300;//open
-				Led5_Set(LED_ON);
-			}else{
-				TIM3->CCR1= 735;//close
-				Led5_Set(LED_OFF);
-			}
+//			if(GPIO_ReadInputDataBit(Body_GPIO_PORT,Body_GPIO_PIN)){
+//				TIM3->CCR1= 300;//open
+//				Led5_Set(LED_ON);
+//			}else{
+//				TIM3->CCR1= 735;//close
+//				Led5_Set(LED_OFF);
+//			}
 			
 
 /******************************************************************************
