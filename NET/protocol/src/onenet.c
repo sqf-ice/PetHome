@@ -52,7 +52,7 @@
 
 
 //119.29.201.31
-ONETNET_INFO oneNetInfo = {"192.168.137.1", "4001", 0, 0, 0, 0};
+ONETNET_INFO oneNetInfo = {"119.29.201.31", "4001", 0, 0, 0, 0};
 extern DATA_STREAM dataStream[];
 
 
@@ -373,10 +373,14 @@ void Net_Event(unsigned char *dataPtr)
 		if(strstr((char *)dataPtr, "1"))
 		{
 			UsartPrintf(USART_DEBUG, "¿ª\r\n");
+			TIM3->CCR1= 300;//open
+			DelayXms(1000);
+			TIM3->CCR1= 735;//close
 			Led4_Set(LED_ON);
 		}
 		else if(strstr((char *)dataPtr,"0")){
 			UsartPrintf(USART_DEBUG,"¹Ø\r\n");
+			
 			Led4_Set(LED_OFF);
 		}
 //	if(strstr((char *)dataPtr, "CLOSED"))
