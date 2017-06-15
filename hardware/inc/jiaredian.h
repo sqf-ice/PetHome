@@ -5,11 +5,11 @@
 
 
 
-#define HOT_ON GPIO_SetBits(GPIOA,GPIO_Pin_5)
-#define HOT_OFF GPIO_ResetBits(GPIOA,GPIO_Pin_5)
-
+#define HOT_ON GPIO_SetBits(GPIOC,GPIO_Pin_1)
+#define HOT_OFF GPIO_ResetBits(GPIOC,GPIO_Pin_1)
+	
 #define  HOT_1    0X01
-#define  H_ON  0
+#define  H_ON  1
 #define  H_OFF  (!H_ON)
 
 typedef struct

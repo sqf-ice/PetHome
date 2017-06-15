@@ -5,11 +5,11 @@ HOT_STATUS hotStatus;
 /*???GPIO?? GPIOA PIN5*/
 void HOT_Init(void){
 	GPIO_InitTypeDef GPIO_Structure;
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
 	GPIO_Structure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Structure.GPIO_Pin = GPIO_Pin_5;
+	GPIO_Structure.GPIO_Pin = GPIO_Pin_1;
 	GPIO_Structure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA,&GPIO_Structure);
+	GPIO_Init(GPIOC,&GPIO_Structure);
 	HOT_Switch(H_OFF,HOT_1);
 }
 
