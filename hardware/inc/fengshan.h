@@ -9,7 +9,7 @@
 #define JDQ_OFF GPIO_ResetBits(GPIOA,GPIO_Pin_8)
 
 #define  JDQ_1    0X01
-#define  J_ON  0
+#define  J_ON  1
 #define  J_OFF  (!J_ON)
 
 typedef struct
