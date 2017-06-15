@@ -10,5 +10,4 @@ extern volatile unsigned char  body_value;
 #define Body_GPIO_CLK RCC_APB2Periph_GPIOB
 
 void Body_Init(void);
-void Get_Bodystatus(void);
 #endif
