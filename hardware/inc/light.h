@@ -5,11 +5,11 @@
 
 
 
-#define LIGHT_ON GPIO_SetBits(GPIOA,GPIO_Pin_15)
-#define LIGHT_OFF GPIO_ResetBits(GPIOA,GPIO_Pin_15)
+#define LIGHT_ON GPIO_SetBits(GPIOC,GPIO_Pin_2)
+#define LIGHT_OFF GPIO_ResetBits(GPIOC,GPIO_Pin_2)
 
 #define  LIGHT_1    0X01
-#define  L_ON  0
+#define  L_ON  1
 #define  L_OFF  (!L_ON)
 
 typedef struct

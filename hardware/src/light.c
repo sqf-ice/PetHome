@@ -5,11 +5,11 @@ LIGHT_STATUS lightStatus;
 /*???GPIO?? GPIOA PIN15*/
 void LIGHT_Init(void){
 	GPIO_InitTypeDef GPIO_Structure;
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
 	GPIO_Structure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Structure.GPIO_Pin = GPIO_Pin_15;
+	GPIO_Structure.GPIO_Pin = GPIO_Pin_2;
 	GPIO_Structure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA,&GPIO_Structure);
+	GPIO_Init(GPIOC,&GPIO_Structure);
 	LIGHT_Switch(L_OFF,LIGHT_1);
 }
 
