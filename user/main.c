@@ -1,3 +1,30 @@
+/**
+	************************************************************
+	************************************************************
+	************************************************************
+	*	文件名： 	main.c
+	*
+	*	作者： 		任志伟
+	*
+	*	日期： 		2017-06-14
+	*
+	*	版本： 		V1.5
+	*
+	*	说明： 	  主函数
+	*
+	*	修改记录：	
+	*	PB3 -- 人体红外
+	* PA6 -- 舵机
+	* PA5 -- 红外对管
+	* PC3 -- 红外对管ADC采样
+	* PC2 -- 紫外线灯
+	* PC1 -- 加热垫
+	*	PA8 -- 风扇
+	************************************************************
+	************************************************************
+	************************************************************
+**/
+
 //单片机头文件
 #include "stm32f10x.h"
 
@@ -230,36 +257,41 @@ Lcd1602_DisString(0x80, "PetHouse ENV");
 				Lcd1602_DisString(0xC0, "%0.1fC,%0.1f%%", sht20Info.tempreture, sht20Info.humidity);
 				if(sht20Info.tempreture>=30){
 					JDQ_Switch(J_ON,JDQ_1);	
-//					HOT_Switch(H_ON,HOT_1);
 					LIGHT_Switch(L_ON,LIGHT_1);
-
 				}
-				else if(sht20Info.tempreture<=29){
+				if(sht20Info.tempreture<=25){
 					JDQ_Switch(J_OFF,JDQ_1);
-//					HOT_Switch(H_OFF,HOT_1);
 					LIGHT_Switch(L_OFF,LIGHT_1);
+				}
+				if(sht20Info.tempreture<=10){
+					HOT_Switch(H_ON,HOT_1);
+				}
+				if(sht20Info.tempreture>=25){
+					HOT_Switch(H_OFF,HOT_1);
 				}
 			}
 			//红外
-			if(t5000Info.status == TCRT5000_ON||GPIO_ReadInputDataBit(Body_GPIO_PORT,Body_GPIO_PIN))
+			if(t5000Info.status == TCRT5000_ON)
 			{
 				TCRT5000_GetValue(5);
-				if(t5000Info.voltag < 3500)
-					//Beep_Set(BEEP_ON);
-					
+				if(t5000Info.voltag < 3500 && GPIO_ReadInputDataBit(Body_GPIO_PORT,Body_GPIO_PIN)){
+					LIGHT_Switch(J_OFF,JDQ_1);
+//					HOT_Switch(J_OFF,JDQ_1);
 					Led6_Set(LED_ON);
-				else
-					//Beep_Set(BEEP_OFF);
+				}else{
+					LIGHT_Switch(J_ON,JDQ_1);
+//					HOT_Switch(J_ON,JDQ_1);
 					Led6_Set(LED_OFF);
+				}
 			}
 			
-//			Get_Bodystatus();//人体红外判断开门
+
 //			if(GPIO_ReadInputDataBit(Body_GPIO_PORT,Body_GPIO_PIN)){
-//				TIM3->CCR1= 300;//open
-//				Led5_Set(LED_ON);
+//				//TIM3->CCR1= 300;//open
+//				Led6_Set(LED_ON);
 //			}else{
-//				TIM3->CCR1= 735;//close
-//				Led5_Set(LED_OFF);
+//				//TIM3->CCR1= 735;//close
+//				Led6_Set(LED_OFF);
 //			}
 			
 
