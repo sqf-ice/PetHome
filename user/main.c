@@ -274,7 +274,8 @@ Lcd1602_DisString(0x80, "PetHouse ENV");
 			if(t5000Info.status == TCRT5000_ON)
 			{
 				TCRT5000_GetValue(5);
-				if(t5000Info.voltag < 3500 && GPIO_ReadInputDataBit(Body_GPIO_PORT,Body_GPIO_PIN)){
+//				&& GPIO_ReadInputDataBit(Body_GPIO_PORT,Body_GPIO_PIN)
+				if(t5000Info.voltag < 3500 ){
 					LIGHT_Switch(J_OFF,JDQ_1);
 //					HOT_Switch(J_OFF,JDQ_1);
 					Led6_Set(LED_ON);
