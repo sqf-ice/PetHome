@@ -255,18 +255,18 @@ Lcd1602_DisString(0x80, "PetHouse ENV");
 			{
 				SHT20_GetValue();													//采集传感器数据
 				Lcd1602_DisString(0xC0, "%0.1fC,%0.1f%%", sht20Info.tempreture, sht20Info.humidity);
-				if(sht20Info.tempreture>=30){
+				if(sht20Info.tempreture>=23){
 					JDQ_Switch(J_ON,JDQ_1);	
 					LIGHT_Switch(L_ON,LIGHT_1);
 				}
-				if(sht20Info.tempreture<=25){
+				if(sht20Info.tempreture<=20){
 					JDQ_Switch(J_OFF,JDQ_1);
 					LIGHT_Switch(L_OFF,LIGHT_1);
 				}
 				if(sht20Info.tempreture<=10){
 					HOT_Switch(H_ON,HOT_1);
 				}
-				if(sht20Info.tempreture>=25){
+				if(sht20Info.tempreture>=23){
 					HOT_Switch(H_OFF,HOT_1);
 				}
 			}
